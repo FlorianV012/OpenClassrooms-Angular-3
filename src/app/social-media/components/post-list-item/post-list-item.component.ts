@@ -13,6 +13,8 @@ export class PostListItemComponent implements OnInit {
     postId: number;
   }>();
 
+  tempUser = { firstName: 'John', lastName: 'Doe' };
+
   constructor() {}
 
   ngOnInit(): void {}
