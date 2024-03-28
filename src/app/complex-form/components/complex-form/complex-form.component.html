@@ -16,19 +16,13 @@
     </div>
   </mat-card>
   <mat-card class="form-card">
-    <mat-card-subtitle
-      >Comment préférez-vous que l'on vous contacte ?</mat-card-subtitle
-    >
+    <mat-card-subtitle>Comment préférez-vous que l'on vous contacte ?</mat-card-subtitle>
     <mat-radio-group [formControl]="contactPreferenceCtrl">
       <mat-radio-button value="email">Mail</mat-radio-button>
       <mat-radio-button value="phone">Téléphone</mat-radio-button>
     </mat-radio-group>
   </mat-card>
-  <mat-card
-    class="form-card"
-    [formGroup]="emailForm"
-    *ngIf="showEmailCtrl$ | async"
-  >
+  <mat-card class="form-card" [formGroup]="emailForm" *ngIf="showEmailCtrl$ | async">
     <mat-card-subtitle>Email</mat-card-subtitle>
     <div class="form-row">
       <mat-form-field appearance="fill">
@@ -42,6 +36,7 @@
         <mat-error>{{ getFormControlErrorText(confirmEmailCtrl) }}</mat-error>
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showEmailError$ | async">Les deux adresses ne correspondent pas</small>
   </mat-card>
   <mat-card class="form-card" *ngIf="showPhoneCtrl$ | async">
     <mat-card-subtitle>Téléphone</mat-card-subtitle>
@@ -70,20 +65,12 @@
         <mat-error>Ce champ est requis</mat-error>
       </mat-form-field>
     </div>
+    <small class="error-text" *ngIf="showPasswordError$ | async">Les mots de passe ne correspondent pas</small>
   </mat-card>
   <mat-card-actions *ngIf="mainForm.valid">
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="onSubmitForm()"
-      [disabled]="loading"
-    >
+    <button mat-flat-button color="primary" (click)="onSubmitForm()" [disabled]="loading">
       ENREGISTRER
     </button>
   </mat-card-actions>
-  <mat-spinner
-    *ngIf="loading"
-    color="primary"
-    mode="indeterminate"
-  ></mat-spinner>
+  <mat-spinner *ngIf="loading" color="primary" mode="indeterminate"></mat-spinner>
 </mat-card>
