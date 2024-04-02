@@ -19,17 +19,23 @@ export class CandidatesService {
     return this._candidates$.asObservable();
   }
 
+  private lastCandidatesLoad = 0;
+
   private setLoadingStatus(loading: boolean) {
     this._loading$.next(loading);
   }
 
   getCandidatesFromServer() {
+    if (Date.now() - this.lastCandidatesLoad <= 300000) {
+      return;
+    }
     this.setLoadingStatus(true);
     this.http
       .get<Candidate[]>(`${environment.apiUrl}/candidates`)
       .pipe(
         delay(1000),
         tap((candidates) => {
+          this.lastCandidatesLoad = Date.now();
           this.setLoadingStatus(false);
           this._candidates$.next(candidates);
         })
