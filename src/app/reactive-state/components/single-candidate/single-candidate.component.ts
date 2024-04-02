@@ -1,4 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { CandidatesService } from '../../services/candidates.service';
+import { Observable } from 'rxjs';
+import { Candidate } from '../../models/candidate.model';
+import { switchMap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-single-candidate',
@@ -7,7 +12,32 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SingleCandidateComponent implements OnInit {
-  constructor() {}
+  loading$!: Observable<boolean>;
+  candidate$!: Observable<Candidate>;
 
-  ngOnInit(): void {}
+  constructor(
+    private candidatesService: CandidatesService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.initObservables();
+  }
+
+  private initObservables() {
+    this.loading$ = this.candidatesService.loading$;
+    this.candidate$ = this.route.params.pipe(
+      switchMap((params) =>
+        this.candidatesService.getCandidateById(+params['id'])
+      )
+    );
+  }
+  onHire() {}
+
+  onRefuse() {}
+
+  onGoBack() {
+    this.router.navigateByUrl('/reactive-state/candidates');
+  }
 }

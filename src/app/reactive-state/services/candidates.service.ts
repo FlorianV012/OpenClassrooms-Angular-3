@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Candidate } from '../models/candidate.model';
 import { environment } from 'src/environments/environment';
-import { delay, tap } from 'rxjs/operators';
+import { delay, map, tap } from 'rxjs/operators';
 
 @Injectable()
 export class CandidatesService {
@@ -41,5 +41,15 @@ export class CandidatesService {
         })
       )
       .subscribe();
+  }
+  getCandidateById(id: number): Observable<Candidate> {
+    if (!this.lastCandidatesLoad) {
+      this.getCandidatesFromServer();
+    }
+    return this.candidates$.pipe(
+      map(
+        (candidates) => candidates.filter((candidate) => candidate.id === id)[0]
+      )
+    );
   }
 }
