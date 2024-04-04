@@ -71,4 +71,27 @@ export class CandidatesService {
       )
       .subscribe();
   }
+
+  hireCandidate(id: number): void {
+    this.candidates$
+      .pipe(
+        take(1),
+        map((candidates) =>
+          candidates.map((candidate) =>
+            candidate.id === id
+              ? { ...candidate, company: 'Snapface LTD' }
+              : candidate
+          )
+        ),
+        tap((updatesCandidates) => this._candidates$.next(updatesCandidates)),
+        delay(1000),
+        switchMap((updatesCandidates) =>
+          this.http.patch(
+            `${environment.apiUrl}/candidates/${id}`,
+            updatesCandidates.find((candidate) => candidate.id === id)
+          )
+        )
+      )
+      .subscribe();
+  }
 }
